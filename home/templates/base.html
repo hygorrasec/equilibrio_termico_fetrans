@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculo de BTU</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        footer {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 20px 0;
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
+    {% block extra_styles %}{% endblock %}
+</head>
+<body>
+    {% block content %}{% endblock %}
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="container">
+            <p><strong>Universidade:</strong> Universidade de Vassouras</p>
+            <p><strong>Disciplina:</strong> Fenômenos de Transporte</p>
+            <p><strong>Professor:</strong> Ana Carolina</p>
+            <p><strong>Estudantes:</strong> Fábio Correia, Hygor Rasec, Larissa Rocha e Nícolas Vítor</p>
+        </div>
+    </footer>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

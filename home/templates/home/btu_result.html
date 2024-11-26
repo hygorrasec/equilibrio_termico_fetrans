@@ -1,12 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Resultado do Cálculo de BTU</title>
-</head>
-<body>
-    <h1>Resultado do Cálculo</h1>
-    <p>BTU Necessário: {{ btu }} BTUs</p>
-    <a href="{% url 'calculate_btu' %}">Voltar</a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Cálculo de BTU{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .result-table td, .result-table th {
+        color: #ffffff;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4 text-center">Resultado do Cálculo</h1>
+    
+    <!-- BTU Total Necessário -->
+    <div class="alert alert-success text-center text-dark" role="alert">
+        <strong>BTU Necessário:</strong> {{ btu }} BTUs
+    </div>
+
+    <!-- Quantidade de Aparelhos e Recomendações -->
+    <div class="my-4">
+        <h3 class="text-center">Recomendações de Aparelhos</h3>
+        <table class="table table-dark table-striped result-table">
+            <thead>
+                <tr>
+                    <th>Tipo de Ar-Condicionado</th>
+                    <th>Capacidade (BTUs)</th>
+                    <th>Quantidade Necessária</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for suggestion in suggestions %}
+                <tr>
+                    <td>{{ suggestion.type }}</td>
+                    <td>{{ suggestion.capacity }} BTUs</td>
+                    <td>{{ suggestion.quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Explicação do Cálculo -->
+    <div class="mt-5">
+        <h3 class="text-center">Como o cálculo foi feito?</h3>
+        <p class="mt-3">
+            O cálculo da carga térmica foi realizado com base em três fatores principais:
+        </p>
+        <ol>
+            <li>
+                <strong>Área do Ambiente:</strong> A largura e o comprimento do local foram multiplicados para calcular a área total, que influencia diretamente na carga térmica gerada pela radiação solar e pelo isolamento das paredes.
+            </li>
+            <li>
+                <strong>Fontes de Calor Internas:</strong> Foram consideradas as pessoas presentes, os equipamentos eletrônicos (como TVs e computadores), as lâmpadas (com base no tipo selecionado) e o número de janelas e eletrodomésticos, cada um contribuindo com uma carga térmica específica em BTUs.
+            </li>
+            <li>
+                <strong>Transferência de Calor pelas Paredes:</strong> O material e a espessura das paredes foram usados para calcular a resistência térmica com base na Lei de Fourier, ajustada pela área isolada informada.
+            </li>
+        </ol>
+        <p>
+            Com todos esses fatores somados, foi aplicada uma margem de segurança de 10% ao resultado final para garantir que a climatização do ambiente seja eficiente e confortável.
+        </p>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'calculate_btu' %}" class="btn btn-primary">Voltar</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}{% endblock %}

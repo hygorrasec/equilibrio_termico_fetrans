@@ -1,15 +1,153 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Cálculo de BTU</title>
-</head>
-<body>
-    <h1>Calcular BTU Necessário</h1>
-    <form method="post">
+{% extends 'base.html' %}
+
+{% block title %}Cálculo de BTU{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .form-label {
+        color: #ffffff;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4 text-center">Calcular BTU Necessário</h1>
+    {% load form_tags %}
+    <form method="post" class="row g-3">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Calcular</button>
+
+        <!-- Campo: Largura -->
+        <div class="col-md-6">
+            <label for="id_room_width" class="form-label">
+                Largura do Local (em metros)
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Informe a largura do ambiente em metros. Este valor será utilizado para calcular a área total do local, que influencia diretamente na quantidade de calor gerado ou transferido para o ambiente."></i>
+            </label>
+            {{ form.room_width|add_class:"form-control bg-dark text-light" }}
+        </div>
+
+        <!-- Campo: Comprimento -->
+        <div class="col-md-6">
+            <label for="id_room_length" class="form-label">
+                Comprimento do Local (em metros)
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Informe o comprimento do ambiente em metros. Este valor, combinado com a largura, determina a área total do ambiente."></i>
+            </label>
+            {{ form.room_length|add_class:"form-control bg-dark text-light" }}
+        </div>
+
+        <!-- Campo: Exposição Solar -->
+        <div class="col-md-6">
+            <label for="id_solar_exposure" class="form-label">
+                Nível de Exposição Solar
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Selecione o nível de exposição solar do ambiente (diretamente exposto ao sol, parcialmente exposto ou sem sol). Este fator influencia a carga térmica gerada pela radiação solar."></i>
+            </label>
+            {{ form.solar_exposure|add_class:"form-select bg-dark text-light" }}
+        </div>
+
+        <!-- Campo: Número de Pessoas -->
+        <div class="col-md-6">
+            <label for="id_people_count" class="form-label">
+                Número de Pessoas no Local
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Informe o número de pessoas que estarão no ambiente. Cada pessoa gera aproximadamente 600 BTUs devido à produção de calor corporal."></i>
+            </label>
+            {{ form.people_count|add_class:"form-control bg-dark text-light" }}
+        </div>
+
+        <!-- Campo: Número de Televisores -->
+        <div class="col-md-6">
+            <label for="id_tv_count" class="form-label">
+                Número de Televisores
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Informe a quantidade de televisores no local. Cada TV adiciona aproximadamente 200 BTUs de carga térmica."></i>
+            </label>
+            {{ form.tv_count|add_class:"form-control bg-dark text-light" }}
+        </div>
+
+        <!-- Campo: Número de Computadores -->
+        <div class="col-md-6">
+            <label for="id_computer_count" class="form-label">
+                Número de Computadores
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Informe a quantidade de computadores no local. Cada computador adiciona aproximadamente 300 BTUs de carga térmica."></i>
+            </label>
+            {{ form.computer_count|add_class:"form-control bg-dark text-light" }}
+        </div>
+
+        <!-- Campo: Número de Lâmpadas -->
+        <div class="col-md-6">
+            <label for="id_lamp_count" class="form-label">
+                Número de Lâmpadas
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Informe a quantidade de lâmpadas no ambiente. A carga térmica gerada depende do tipo de lâmpada selecionado."></i>
+            </label>
+            {{ form.lamp_count|add_class:"form-control bg-dark text-light" }}
+        </div>
+
+        <!-- Campo: Tipo de Lâmpada -->
+        <div class="col-md-6">
+            <label for="id_lamp_type" class="form-label">
+                Tipo de Lâmpada
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Selecione o tipo de lâmpada usada no ambiente (Incandescente, Fluorescente ou LED). Cada tipo possui uma potência térmica diferente. Incandescente: 80W, Fluorescente: 30W e LED: 15W"></i>
+            </label>
+            {{ form.lamp_type|add_class:"form-select bg-dark text-light" }}
+        </div>
+
+        <!-- Campo: Número de Janelas -->
+        <div class="col-md-6">
+            <label for="id_window_count" class="form-label">
+                Número de Janelas
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Informe a quantidade de janelas no ambiente. Cada janela contribui com aproximadamente 500 BTUs devido à entrada de calor externo."></i>
+            </label>
+            {{ form.window_count|add_class:"form-control bg-dark text-light" }}
+        </div>
+
+        <!-- Campo: Número de Eletrodomésticos -->
+        <div class="col-md-6">
+            <label for="id_appliance_count" class="form-label">
+                Número de Eletrodomésticos
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Informe a quantidade de eletrodomésticos no ambiente, como geladeiras ou micro-ondas. Cada eletrodoméstico adiciona aproximadamente 500 BTUs de carga térmica."></i>
+            </label>
+            {{ form.appliance_count|add_class:"form-control bg-dark text-light" }}
+        </div>
+
+        <!-- Campo: Material da Parede -->
+        <div class="col-md-6">
+            <label for="id_wall_material" class="form-label">
+                Material da Parede
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Selecione o material predominante das paredes (Concreto, Tijolo ou Madeira). Este fator influencia a condutividade térmica e a transferência de calor para o ambiente. Concreto: 1.7k, Tijolo: 0.72k e Madeira: 0.13k"></i>
+            </label>
+            {{ form.wall_material|add_class:"form-select bg-dark text-light" }}
+        </div>
+
+        <!-- Campo: Espessura da Parede -->
+        <div class="col-md-6">
+            <label for="id_wall_thickness" class="form-label">
+                Espessura da Parede (em metros)
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Informe a espessura média das paredes do ambiente em metros. Paredes mais espessas oferecem maior resistência térmica, reduzindo a transferência de calor."></i>
+            </label>
+            {{ form.wall_thickness|add_class:"form-control bg-dark text-light" }}
+        </div>
+
+        <!-- Campo: Altura do Local -->
+        <div class="col-md-6">
+            <label for="id_room_height" class="form-label">
+                Altura do Local (em metros)
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Informe a altura do ambiente em metros. Este valor determina o volume total de ar no ambiente, influenciando a carga térmica necessária."></i>
+            </label>
+            {{ form.room_height|add_class:"form-control bg-dark text-light" }}
+        </div>
+
+        <!-- Campo: Área Isolada -->
+        <div class="col-md-6">
+            <label for="id_insulation_area" class="form-label">
+                Área Isolada (em m²)
+                <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" title="Informe a área total do ambiente que possui isolamento térmico em metros quadrados. Áreas isoladas reduzem significativamente a transferência de calor para o ambiente."></i>
+            </label>
+            {{ form.insulation_area|add_class:"form-control bg-dark text-light" }}
+        </div>
+
+        <!-- Botão de Submissão -->
+        <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary">Calcular</button>
+        </div>
     </form>
-</body>
-</html>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}{% endblock %}
